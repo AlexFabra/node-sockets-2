@@ -1,3 +1,7 @@
+const TicketControl = require("../models/ticket-control");
+
+const ticketControl = new TicketControl();
+
 const socketController = (socket) => {
 
     //console.log('Cliente conectado', socket.id);

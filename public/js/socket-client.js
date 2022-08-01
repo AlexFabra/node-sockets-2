@@ -1,35 +1,47 @@
-const lblOnline = document.querySelector('#lblOnline');
+
+// Referencias del HTML
+const lblOnline  = document.querySelector('#lblOnline');
 const lblOffline = document.querySelector('#lblOffline');
-const txtMsg = document.querySelector('#txtMsg');
-const btnSend = document.querySelector('#btnSend');
+const txtMensaje = document.querySelector('#txtMensaje');
+const btnEnviar  = document.querySelector('#btnEnviar');
 
-const clientSocket = io();
 
-clientSocket.on('connect',()=>{
-    //console.log('conectado')
-    lblOffline.style.display='none';
-    lblOnline.style.display='';
-})
+const socket = io();
 
-clientSocket.on('disconnect',()=>{
-    //console.log('desconectado')
-    lblOffline.style.display='';
-    lblOnline.style.display='none';
-})
 
-clientSocket.on('mensaje-recibido',(payload)=>{
-    console.log(payload)
-})
 
-btnSend.addEventListener('click',()=>{
-    const msg=txtMsg.value;
-    const payload = {
-        msg,
-        id:'jeje',
-        date: new Date()
-    }
-    clientSocket.emit('mensaje',payload, (msg)=>{
-        console.log('contestación del server:', msg)
-    })
+socket.on('connect', () => {
+    // console.log('Conectado');
+
+    lblOffline.style.display = 'none';
+    lblOnline.style.display  = '';
+
 });
 
+socket.on('disconnect', () => {
+    // console.log('Desconectado del servidor');
+
+    lblOnline.style.display  = 'none';
+    lblOffline.style.display = '';
+});
+
+
+socket.on('enviar-mensaje', (payload) => {
+    console.log( payload )
+})
+
+
+btnEnviar.addEventListener( 'click', () => {
+
+    const mensaje = txtMensaje.value;
+    const payload = {
+        mensaje,
+        id: '123ABC',
+        fecha: new Date().getTime()
+    }
+    
+    socket.emit( 'enviar-mensaje', payload, ( id ) => {
+        console.log('Desde el server', id );
+    });
+
+});
